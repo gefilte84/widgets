@@ -1,12 +1,48 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // importerer axios for å koble mot Wikipedia API
 // bruker hooks for å oppdatere state
+// Wikipedia API inkludert
 const Search = () => {
     const [term, setTerm] = useState('programming');
+    // variabel for å overvåke når en bruker stopper eller endrer søk
+    // debouncedTerm er referanse til timeout når bruker stopper å skrive
+    const [debouncedTerm, setDebouncedTerm] = useState(term);
     const [results, setResults] = useState([]);
 
+    // denne useEffect skal overvåke debouncedTerm. når det skjer endringer på denne,
+    // da kjører vi request og oppdaterer debouncedTerm.
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setDebouncedTerm(term);
+        }, 1000);
+        // clean up som gjør at timer blir nullstilt
+            return () => {
+                clearTimeout(timerId);
+            };
+        }, [term]);
+
+    // denne useEffect kjører når siden lastet inn.
+    // 
+    // wikipedia api er her
+
+    useEffect(() => {
+        const search = async () => {
+          const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
+            params: {
+              action: 'query',
+              list: 'search',
+              origin: '*',
+              format: 'json',
+              srsearch: debouncedTerm,
+            },
+          });
+    
+          setResults(data.query.search);
+        };
+        search();
+      }, [debouncedTerm]);
     
     //useEffect funksjon. første arg er alltid arrow funksjon
     // andre argument forteller useEffect når koden skal kjøre
@@ -14,40 +50,16 @@ const Search = () => {
     //enten tom array(kjøre ved første render), 
     //tom andre argument(kjøre ved første render og hver eneste render etter det)
     //array med variabel(kjøre ved første og hver eneste render og IF data(input) er endret)
-    //Wikipedia API
-    useEffect(() => {
-        const search = async () => {
-            const {data} = await axios.get('https://en.wikipedia.org/w/api.php', {
-                params: {
-                    action: 'query',
-                    list: 'search',
-                    origin: '*',
-                    format: 'json',
-                    srsearch: term,
-                }
-            });
+    
 
-            setResults(data.query.search);
-        };
-        // sørger for at når siden først lastes inn så kommer det med engang
-        // ved andre søk eller endring i søk så kikker timeout inn
-        if (term && !results.length) {
-            search();
-        } else {
-                    // hvis du ønsker at siden starter blank
-        // endre linje 7 hvis du ønsker at noen skal vises første gang
-        // siden lastes inn
+    
         // setTimeout gjør at det ikke gjøres spørringer konstant mot wiki api
         // hvis bruker mindre tid enn 500ms eller 1000ms
         // når bruker ikke har skrevet på 500ms så blir det sent en api request
         // delayed resultat
-        return () => {
-            clearTimeout(timeoutId);
-            };
-        }
+    
 
-        
-    }, [term]);
+  
     // map funksjon for å hente resultatet i en array og bygger ut en liste
     const renderedResults = results.map((result) => {
         return (
