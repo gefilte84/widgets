@@ -38,12 +38,6 @@ const Search = () => {
         // endre linje 7 hvis du ønsker at noen skal vises første gang
         // siden lastes inn
         // setTimeout gjør at det ikke gjøres spørringer konstant mot wiki api
-        const timeoutId = setTimeout(() => {
-            if (term) {
-                search();
-            }
-        }, 1000);
-        // return funksjon for å avlyse timer og søk mot api
         // hvis bruker mindre tid enn 500ms eller 1000ms
         // når bruker ikke har skrevet på 500ms så blir det sent en api request
         // delayed resultat
