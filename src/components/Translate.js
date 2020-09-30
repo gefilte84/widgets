@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import Dropdown from './Dropdown';
+import Convert from './Convert';
 
+// språk vi ønsker å ha med
 const options = [
 {
     label: 'Norwegian',
@@ -41,6 +43,9 @@ const Translate = () => {
             onSelectedChange={setLanguage}
             options={options} 
         />
+        <hr />
+        <h3 className="ui header">Output</h3>
+        <Convert text={text} language={language} />
         </div>
     );
 };
