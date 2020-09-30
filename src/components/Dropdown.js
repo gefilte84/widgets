@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // vi skal map over lista options og bygger opp en liste
 // når du bruker addEvent så blir den hentet først så react sine onClick
 // useRef gjør at vi kan gå direkte til et DOM element
-const Dropdown = ({ options, selected, onSelectedChange }) => {
+const Dropdown = ({ label, options, selected, onSelectedChange }) => {
     const [open, setOpen] = useState(false);
     const ref = useRef();
   
@@ -45,7 +45,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
     return (
         <div ref={ref} className="ui form">
             <div className="field">
-                <label className="label">Select a Color</label>
+                <label className="label">{label}</label>
                 <div 
                 onClick={() => setOpen(!open)}
                 className={`ui selection dropdown ${open ? 'visible active' : ''}`}
