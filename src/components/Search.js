@@ -8,6 +8,8 @@ const Search = () => {
     const [term, setTerm] = useState('programming');
     // variabel for å overvåke når en bruker stopper eller endrer søk
     // debouncedTerm er referanse til timeout når bruker stopper å skrive
+    // dette er avansert btw
+    // vi har lagd to states for å kunne ha søk og erstatte søket med noe annet
     const [debouncedTerm, setDebouncedTerm] = useState(term);
     const [results, setResults] = useState([]);
 
@@ -38,11 +40,10 @@ const Search = () => {
               srsearch: debouncedTerm,
             },
           });
-    
           setResults(data.query.search);
         };
         search();
-      }, [debouncedTerm]);
+    }, [debouncedTerm]);
     
     //useEffect funksjon. første arg er alltid arrow funksjon
     // andre argument forteller useEffect når koden skal kjøre

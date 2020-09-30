@@ -2,6 +2,8 @@
 // gir oss tilgang til state i en funksjonell komponent
 import React, { useState } from 'react';
 
+// Accordion holder props fra app.js
+
 
 // legger items i component accordion
 const Accordion = ({ items }) => {
