@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // vi gir options inn til dropdown funksjonen
 // vi skal map over lista options og bygger opp en liste
 // når du bruker addEvent så blir den hentet først så react sine onClick
+// useRef gjør at vi kan gå direkte til et DOM element
 const Dropdown = ({ options, selected, onSelectedChange }) => {
     const [open, setOpen] = useState(false);
+    const ref = useRef();
   
     useEffect(() => {
-        document.body.addEventListener('click', () => {
+        const onBodyClick = (event) => {
+            if (ref.current.contains(event.target)){
+                return;
+            }
             setOpen(false);
-        });
+        };
+        document.body.addEventListener('click', onBodyClick);
+        // clean up av komponent
+        return () => {
+            document.body.removeEventListener('click', onBodyClick);
+        };
     }, []);
     //empty array på slutten for at den kun kjører en gang
     const renderedOptions = options.map((option) => {
@@ -33,7 +43,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
     // som gjør at når du trykker på den så toogler du menyen
     // onclick her styrer hele dropdown menyen
     return (
-        <div className="ui form">
+        <div ref={ref} className="ui form">
             <div className="field">
                 <label className="label">Select a Color</label>
                 <div 
