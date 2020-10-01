@@ -3,6 +3,8 @@ import Accordion from './components/Accordion';
 import Search from './components/Search';
 import Dropdown from './components/Dropdown';
 import Translate from './components/Translate';
+import Route from './components/Route';
+
 
 // Statisk array
 const items = [
@@ -39,6 +41,10 @@ const options = [
 ];
 
 // Route mappings. Navigasjon for appen
+// Alternativ metode for navigasjon
+// Det er opprettet en egen route komponent for å styre
+// navigasjonen.
+/*
 const showAccordion = () => {
     if (window.location.pathname === '/'){
         return <Accordion items={items} />
@@ -62,6 +68,8 @@ const showTranslate = () => {
         return <Translate />;
     }
 };
+*/
+
 
 
 
@@ -70,13 +78,29 @@ const showTranslate = () => {
 // App component
 // onSelectedChange er event handler, callback
 // on noe change
+// når du router på denne måten så blir accordion en child 
+// og child kan du bruke som referanse i route klassen
 export default () => {
+    const [selected, setSelected] = useState(options[0]);
     return (
     <div>
-        {showAccordion()}
-        {showList()}
-        {showDropdown()}
-        {showTranslate()}
+        <Route path="/">
+            <Accordion items={items}/>
+        </Route>
+        <Route path="/list">
+            <Search />
+        </Route>
+        <Route path="/dropdown">
+            <Dropdown 
+                label="Select a color"
+                options={options}
+                selected={selected}
+                onSelectedChange={setSelected}
+            />
+        </Route>
+        <Route path="/translate">
+            <Translate />
+        </Route>
     </div>
     );
 };
