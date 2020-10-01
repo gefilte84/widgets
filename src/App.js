@@ -37,6 +37,35 @@ const options = [
 }
 
 ];
+
+// Route mappings. Navigasjon for appen
+const showAccordion = () => {
+    if (window.location.pathname === '/'){
+        return <Accordion items={items} />
+    }
+};
+
+const showList = () => {
+    if (window.location.pathname === '/list'){
+        return <Search />;
+    }
+};
+
+const showDropdown = () => {
+    if (window.location.pathname === '/dropdown'){
+        return <Dropdown />;
+    }
+};
+
+const showTranslate = () => {
+    if (window.location.pathname === '/translate'){
+        return <Translate />;
+    }
+};
+
+
+
+
 // Målet er å gi props til dropdown
 // App component
 // onSelectedChange er event handler, callback
@@ -44,7 +73,10 @@ const options = [
 export default () => {
     return (
     <div>
-        <Translate />
+        {showAccordion()}
+        {showList()}
+        {showDropdown()}
+        {showTranslate()}
     </div>
     );
 };
